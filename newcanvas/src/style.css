@@ -1,0 +1,15 @@
+#canvas {
+    border: solid 10px #000000;
+}
+
+.row {
+    display: flex;
+}
+  
+.left-column {
+    flex: 20%;
+}
+
+.right-column {
+    flex: 70%;
+}
