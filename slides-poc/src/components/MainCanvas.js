@@ -36,7 +36,7 @@ export function MainCanvas() {
         //setSelectionColor(canvas.selectionColor);
         const originalColor = canvas.selectionColor;
 
-        canvas.on('mouse:down', canvasMouseDownCB);
+        canvas.on('mouse:down:before', canvasMouseDownCB(canvas));
         canvas.on('mouse:up', canvasMouseUpCB(canvas, originalColor));
     }
 

@@ -37,18 +37,21 @@ const fabricCreateDynamic = (pointA, pointB, objType) => {
 export const useStore = create((set, get) => ({
   drawMode: "none",
   firstCoord: { x: 0, y: 0},
-  canvasMouseDownCB: (opt) => {
-    /*console.log(isDrawing)
-    if (isDrawingRef.current) {
-      setDrawCoords(opt.absolutePointer)
-      console.log("Begin pos:")
-      console.log(opt.absolutePointer)
-    }*/
-    console.log(get().drawMode);
-    if (get().drawMode !== "none") {
+  canvasMouseDownCB: (canvas) => {
+    return (opt) => {
+        /*console.log(isDrawing)
+        if (isDrawingRef.current) {
+        setDrawCoords(opt.absolutePointer)
         console.log("Begin pos:")
         console.log(opt.absolutePointer)
-        set({ firstCoord: opt.absolutePointer})
+        }*/
+        console.log(get().drawMode);
+        if (get().drawMode !== "none") {
+            canvas.selectionColor = 'green'
+            console.log("Begin pos:")
+            console.log(opt.absolutePointer)
+            set({ firstCoord: opt.absolutePointer})
+        }
     }
   },
   canvasMouseUpCB: (canvas, originalColor) => {
