@@ -25,6 +25,8 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
+import { useStore } from './Store'
+
 /* Copy from Official MUI doc */
 function TitlebarBelowImageList() {
   return (
@@ -132,6 +134,9 @@ function App() {
   // Fabric JS hooks
   const { editor, onReady } = useFabricJSEditor()
 
+  const canvasMouseDownCB = useStore((state) => state.canvasMouseDownCB);
+  const canvasMouseUpCB = useStore((state) => state.canvasMouseUpCB);
+  const changeDrawMode = useStore((state) => state.changeDrawMode);
   //Totally a hack you need a proper state management lib like zustand for it to work
   const [ isDrawing, setDrawing ] = useState(false);
   const [ drawCoords, setDrawCoords ] = useState(null);
@@ -163,38 +168,16 @@ function App() {
     //setSelectionColor(canvas.selectionColor);
     const originalColor = canvas.selectionColor;
 
-    canvas.on('mouse:down', (opt) => {
-      console.log(isDrawing)
-      if (isDrawingRef.current) {
-        setDrawCoords(opt.absolutePointer)
-        console.log("Begin pos:")
-        console.log(opt.absolutePointer)
-      }
-    })
-    canvas.on('mouse:up', (opt) => {
-      if (isDrawingRef.current) {
-        const xCoords = [drawCoordsRef.current.x, opt.absolutePointer.x].sort((a, b) => a - b);
-        const yCoords = [drawCoordsRef.current.y, opt.absolutePointer.y].sort((a, b) => a - b);
-        const myTestRect = new fabric.Rect({
-          top: yCoords[0],
-          left: xCoords[0],
-          width: xCoords[1] - xCoords[0],
-          height: yCoords[1] - yCoords[0],
-          fill: 'purple'
-        });
-        canvas.add(myTestRect);
-        canvas.selectionColor = originalColor;
-        setDrawing(false)
-        setDrawCoords(null)
-      }
-    })
+    canvas.on('mouse:down', canvasMouseDownCB);
+    canvas.on('mouse:up', canvasMouseUpCB(canvas, originalColor));
   }
   //absolutePointer, mouse:up and down
   const onMore = () => {
 
     if (editor) {
       editor.canvas.selectionColor = 'green'
-      setDrawing(true)
+      //setDrawing(true)
+      changeDrawMode("rect");
     }
 
     //editor?.canvas.setHeight(500);
