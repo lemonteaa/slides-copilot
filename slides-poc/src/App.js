@@ -5,9 +5,14 @@ import './App.css';
 //import { Grid, Toolbar, Typography } from '@material-ui/core';
 
 import * as React from 'react';
-import { Grid, Toolbar, Typography, Card } from '@mui/material';
+import { Grid, Toolbar, Typography, Card, 
+  Button, ButtonGroup, Divider, IconButton, 
+  Menu, MenuItem } from '@mui/material';
 
 import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react'
+
+import { PhotoCamera } from '@mui/icons-material';
+
 
 function App() {
   const { editor, onReady } = useFabricJSEditor()
@@ -27,6 +32,17 @@ function App() {
     editor?.canvas.setWidth(800);
   }
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
@@ -36,8 +52,33 @@ function App() {
       </Grid>
       <Grid item xs={12}>
         <Toolbar>
-          {/* Add toolbar items here */}
           <Typography variant="h6">Toolbar</Typography>
+          <ButtonGroup variant="contained">
+            <Button>Button 1</Button>
+            <Button>
+              <PhotoCamera />
+            </Button>
+            <Button onClick={handleClick}>Button with Dropdown</Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleClose}>Menu Item 1</MenuItem>
+              <MenuItem onClick={handleClose}>Menu Item 2</MenuItem>
+            </Menu>
+          </ButtonGroup>
+          <Divider orientation="vertical" flexItem />
+          <ButtonGroup variant="contained">
+            <Button>Button 2</Button>
+            <IconButton aria-label="camera">
+              <PhotoCamera />
+            </IconButton>
+          </ButtonGroup>
         </Toolbar>
       </Grid>
       <Grid item xs={4}>
