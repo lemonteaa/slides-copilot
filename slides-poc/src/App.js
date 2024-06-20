@@ -5,7 +5,7 @@ import './App.css';
 //import { Grid, Toolbar, Typography } from '@material-ui/core';
 
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Grid, Toolbar, Typography, Card, 
   Button, ButtonGroup, Divider, IconButton, 
   Menu, MenuItem, TextField, Select, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
@@ -121,7 +121,17 @@ const validationSchema = Yup.object({
 });
 
 function App() {
+  // Fabric JS hooks
   const { editor, onReady } = useFabricJSEditor()
+
+  //Totally a hack you need a proper state management lib like zustand for it to work
+  const [ isDrawing, setDrawing ] = useState(false);
+  const [ drawCoords, setDrawCoords ] = useState(null);
+  const isDrawingRef = useRef();
+  const drawCoordsRef = useRef();
+  isDrawingRef.current = isDrawing;
+  drawCoordsRef.current = drawCoords;
+  //const [ selectionColor, setSelectionColor ] = useState("");
   const onAddCircle = () => {
     editor?.addCircle()
   }
@@ -132,12 +142,62 @@ function App() {
     onReady(canvas);
     canvas.setHeight(500);
     canvas.setWidth(800);
+
+    // TODO: object:selected vs mouse:down vs selection:created
+    // For selection: created/updated/cleared, options.selected and options.deselected are arrays
+    canvas.on('selection:created', function(options) {
+      //if (options.target) {
+      //  console.log('an object was selected! ', options.target.type);
+      //}
+      console.log(options)
+    });
+
+    //setSelectionColor(canvas.selectionColor);
+    const originalColor = canvas.selectionColor;
+
+    canvas.on('mouse:down', (opt) => {
+      console.log(isDrawing)
+      if (isDrawingRef.current) {
+        setDrawCoords(opt.absolutePointer)
+        console.log("Begin pos:")
+        console.log(opt.absolutePointer)
+      }
+    })
+    canvas.on('mouse:up', (opt) => {
+      if (isDrawingRef.current) {
+        //canvas.add()
+        canvas.selectionColor = originalColor;
+        setDrawing(false)
+        setDrawCoords(null)
+      }
+    })
   }
+  //absolutePointer, mouse:up and down
   const onMore = () => {
-    editor?.canvas.setHeight(500);
-    editor?.canvas.setWidth(800);
+
+    if (editor) {
+      editor.canvas.selectionColor = 'green'
+      setDrawing(true)
+    }
+
+    //editor?.canvas.setHeight(500);
+    //editor?.canvas.setWidth(800);
+    /*let originalColor = editor.canvas.selectionColor;
+    if (editor) {
+      editor.canvas.selectionColor = 'green';
+      //editor.canvas.selection = false;
+      editor.canvas.on('mouse:down', (opt) => {
+        console.log(opt.absolutePointer)
+      })
+      editor.canvas.on('mouse:up', (opt) => {
+        console.log(opt.absolutePointer)
+        editor.canvas.selectionColor = originalColor;
+        //editor.canvas.selection = true;
+      })
+    }*/
   }
 
+  // Toolbar
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -149,6 +209,7 @@ function App() {
     setAnchorEl(null);
   };
 
+  //Edit attribute form
   const [formData, setFormData] = useState(initialValues);
 
   const formik = useFormik({
@@ -219,6 +280,7 @@ function App() {
           <button onClick={onMore}>Test</button>
           <FabricJSCanvas className="sample-canvas" onReady={myOnReady} />
         </Card>
+        <span>isDrawing: {isDrawing.toString()}, drawCoords: {drawCoords ? drawCoords.x : "none"}</span>
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6">Column 3</Typography>
