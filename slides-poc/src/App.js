@@ -13,6 +13,7 @@ import { Grid, Toolbar, Typography, Card,
 import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react'
 
 import { PhotoCamera } from '@mui/icons-material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -240,12 +241,12 @@ function App() {
       <Grid item xs={12}>
         <Toolbar>
           <Typography variant="h6">Toolbar</Typography>
-          <ButtonGroup variant="contained">
+          <ButtonGroup sx={{ mx: 2 }} variant="contained">
             <Button>Button 1</Button>
             <Button>
               <PhotoCamera />
             </Button>
-            <Button onClick={handleClick}>Button with Dropdown</Button>
+            <Button onClick={handleClick} endIcon={ <ArrowDropDownIcon/> }>Button with Dropdown</Button>
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -260,7 +261,7 @@ function App() {
             </Menu>
           </ButtonGroup>
           <Divider orientation="vertical" flexItem />
-          <ButtonGroup variant="contained">
+          <ButtonGroup sx={{ mx: 2 }} variant="outlined">
             <Button>Button 2</Button>
             <IconButton aria-label="camera">
               <PhotoCamera />
