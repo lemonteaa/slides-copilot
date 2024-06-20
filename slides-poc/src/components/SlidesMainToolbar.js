@@ -12,6 +12,8 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 import { Toolbar, Typography, Button, ButtonGroup, Divider, IconButton, Menu, MenuItem } from '@mui/material';
 
+import { useStore } from '../Store'
+
 export function SlidesMainToolbar() {
     // Toolbar
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -24,6 +26,9 @@ export function SlidesMainToolbar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    // Global Store
+    const changeDrawMode = useStore((state) => state.changeDrawMode);
 
     return (
     <Toolbar>
@@ -48,13 +53,13 @@ export function SlidesMainToolbar() {
         <Divider orientation="vertical" flexItem />
         <ButtonGroup sx={{ mx: 2 }} variant="outlined">
             <Typography variant="h6">Insert:</Typography>
-            <IconButton>
+            <IconButton onClick={() => { changeDrawMode("text") }}>
                 <TitleIcon/>
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => { changeDrawMode("image") }}>
                 <AddPhotoAlternateIcon/>
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => { changeDrawMode("shape") }}>
                 <RectangleIcon/>
             </IconButton>
         </ButtonGroup>
