@@ -10,6 +10,7 @@ import { Grid, Toolbar, Typography, Card,
   Button, ButtonGroup, Divider, IconButton, 
   Menu, MenuItem, TextField, Select, ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
 
+import { fabric } from 'fabric';
 import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react'
 
 import { PhotoCamera } from '@mui/icons-material';
@@ -172,7 +173,16 @@ function App() {
     })
     canvas.on('mouse:up', (opt) => {
       if (isDrawingRef.current) {
-        //canvas.add()
+        const xCoords = [drawCoordsRef.current.x, opt.absolutePointer.x].sort((a, b) => a - b);
+        const yCoords = [drawCoordsRef.current.y, opt.absolutePointer.y].sort((a, b) => a - b);
+        const myTestRect = new fabric.Rect({
+          top: yCoords[0],
+          left: xCoords[0],
+          width: xCoords[1] - xCoords[0],
+          height: yCoords[1] - yCoords[0],
+          fill: 'purple'
+        });
+        canvas.add(myTestRect);
         canvas.selectionColor = originalColor;
         setDrawing(false)
         setDrawCoords(null)
