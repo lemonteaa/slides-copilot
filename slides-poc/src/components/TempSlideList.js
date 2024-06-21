@@ -3,12 +3,14 @@ import { ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
 import { useStore } from '../Store'
 
 /* Copy from Official MUI doc */
-export function TitlebarBelowImageList() {
+export function TitlebarBelowImageList({ fabricEditor }) {
   const slides = useStore((state) => state.slides);
+  const gotoSlide = useStore((state) => state.gotoSlide);
+  const loadSlide = useStore((state) => state.loadSlide);
   return (
-    <ImageList sx={{ width: 250, height: 700 }}>
+    <ImageList sx={{ width: 250, height: 700 }} cols={1} >
       {slides.map((item, idx) => (
-        <ImageListItem key={idx}>
+        <ImageListItem key={idx} onClick={() => { loadSlide(fabricEditor?.canvas, idx); gotoSlide(idx); }}>
           <img
             src={item.preview}
             height="125"

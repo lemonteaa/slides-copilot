@@ -36,6 +36,8 @@ const fabricCreateDynamic = (pointA, pointB, objType) => {
     }
 }
 
+
+//TODO: addNewSlide: may insert in middle
 export const useStore = create((set, get) => ({
   drawMode: "none",
   firstCoord: { x: 0, y: 0},
@@ -43,6 +45,12 @@ export const useStore = create((set, get) => ({
   slides: [],
   initSlide: (slide) => {
     set({ slides: [slide] })
+  },
+  loadSlide: (canvas, idx) => {
+    canvas.loadFromJSON(get().slides[idx].content)
+  },
+  gotoSlide: (idx) => {
+    set({ activeSlide: idx })
   },
   persistCurrentSlide: (canvas) => {
     set(produce((state) => {

@@ -69,7 +69,7 @@ function App() {
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6">Column 1</Typography>
-        <TitlebarBelowImageList/>
+        <TitlebarBelowImageList fabricEditor={editor}/>
       </Grid>
       <Grid item xs={4}>
         <MainCanvas editor={editor} onReady={onReady} />
