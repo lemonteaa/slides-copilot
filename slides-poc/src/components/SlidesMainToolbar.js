@@ -14,7 +14,9 @@ import { Toolbar, Typography, Button, ButtonGroup, Divider, IconButton, Menu, Me
 
 import { useStore } from '../Store'
 
-export function SlidesMainToolbar() {
+import * as FabricLayout from '../functions/layout'
+
+export function SlidesMainToolbar({ fabricEditor }) {
     // Toolbar
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -23,8 +25,19 @@ export function SlidesMainToolbar() {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleClose = (event) => {
+        console.log(event.target.textContent)
+        console.log(event.target.getAttribute("data-item"))
         setAnchorEl(null);
+
+        if (event.target.getAttribute("data-item") == "two-cols") {
+            if (fabricEditor) {
+                const canvas = fabricEditor.canvas;
+                canvas.remove(...canvas.getObjects());
+                FabricLayout.genLayout(canvas, FabricLayout.randomFromList(FabricLayout.titles), FabricLayout.randomFromList(FabricLayout.subtext));
+                canvas.renderAll();
+            }
+        }
     };
 
     // Global Store
@@ -45,9 +58,9 @@ export function SlidesMainToolbar() {
                 'aria-labelledby': 'basic-button',
             }}
             >
-                <MenuItem onClick={handleClose}>Title and Subtitle</MenuItem>
-                <MenuItem onClick={handleClose}>Two Columns</MenuItem>
-                <MenuItem onClick={handleClose}>Empty</MenuItem>
+                <MenuItem data-item={"title"} onClick={handleClose}>Title and Subtitle</MenuItem>
+                <MenuItem data-item={"two-cols"} onClick={handleClose}>Two Columns</MenuItem>
+                <MenuItem data-item={"empty"} onClick={handleClose}>Empty</MenuItem>
             </Menu>
         </ButtonGroup>
         <Divider orientation="vertical" flexItem />

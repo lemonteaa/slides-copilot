@@ -65,7 +65,7 @@ function App() {
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <SlidesMainToolbar/>
+        <SlidesMainToolbar fabricEditor={editor} />
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6">Column 1</Typography>
