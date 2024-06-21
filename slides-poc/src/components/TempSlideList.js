@@ -1,20 +1,23 @@
 import { ImageList, ImageListItem, ImageListItemBar } from '@mui/material';
 
+import { useStore } from '../Store'
+
 /* Copy from Official MUI doc */
 export function TitlebarBelowImageList() {
+  const slides = useStore((state) => state.slides);
   return (
-    <ImageList sx={{ width: 300, height: 700 }}>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
+    <ImageList sx={{ width: 250, height: 700 }}>
+      {slides.map((item, idx) => (
+        <ImageListItem key={idx}>
           <img
-            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-            src={`${item.img}?w=248&fit=crop&auto=format`}
-            alt={item.title}
+            src={item.preview}
+            height="125"
+            width="200"
+            alt={`Slide #${idx}`}
             loading="lazy"
           />
           <ImageListItemBar
-            title={item.title}
-            subtitle={<span>by: {item.author}</span>}
+            title={<span>Slide #{idx}</span>}
             position="below"
           />
         </ImageListItem>
@@ -22,6 +25,13 @@ export function TitlebarBelowImageList() {
     </ImageList>
   );
 }
+
+/*
+`${item.img}?w=248&fit=crop&auto=format`
+            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+            subtitle={<span>by: {item.author}</span>}
+            alt={item.title}
+ */
 
 const itemData = [
   {
