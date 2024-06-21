@@ -1,14 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
 
 //import React from 'react';
 //import { Grid, Toolbar, Typography } from '@material-ui/core';
 
 import * as React from 'react';
-import { useState, useRef } from 'react';
-import { Grid, Typography, Card, 
-  Button, MenuItem, TextField, Select } from '@mui/material';
+import { useState } from 'react';
+import { Grid, Typography, Button, MenuItem, TextField, Select } from '@mui/material';
 
+import { useFabricJSEditor } from 'fabricjs-react'
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -34,6 +33,8 @@ const validationSchema = Yup.object({
 });
 
 function App() {
+  // Fabric JS hooks
+  const { editor, onReady } = useFabricJSEditor()
 
   //Edit attribute form
   const [formData, setFormData] = useState(initialValues);
@@ -71,7 +72,7 @@ function App() {
         <TitlebarBelowImageList/>
       </Grid>
       <Grid item xs={4}>
-        <MainCanvas/>
+        <MainCanvas editor={editor} onReady={onReady} />
       </Grid>
       <Grid item xs={4}>
         <Typography variant="h6">Column 3</Typography>

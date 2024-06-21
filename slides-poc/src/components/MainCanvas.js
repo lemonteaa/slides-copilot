@@ -1,13 +1,11 @@
-import { fabric } from 'fabric';
-import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react'
+//import { fabric } from 'fabric';
+import { FabricJSCanvas } from 'fabricjs-react'
 
 import { useStore } from '../Store'
 
 import { Typography, Card } from '@mui/material';
 
-export function MainCanvas() {
-    // Fabric JS hooks
-    const { editor, onReady } = useFabricJSEditor()
+export function MainCanvas({ editor, onReady }) {
 
     const canvasMouseDownCB = useStore((state) => state.canvasMouseDownCB);
     const canvasMouseUpCB = useStore((state) => state.canvasMouseUpCB);
