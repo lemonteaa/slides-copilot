@@ -10,7 +10,7 @@ import ShapeLineIcon from '@mui/icons-material/ShapeLine';
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-import { Toolbar, Typography, Button, ButtonGroup, Divider, IconButton, Menu, MenuItem } from '@mui/material';
+import { Toolbar, Typography, Button, ButtonGroup, Divider, IconButton, Menu, MenuItem, Modal, Box, Link } from '@mui/material';
 
 import { useStore } from '../Store'
 
@@ -20,6 +20,8 @@ export function SlidesMainToolbar({ fabricEditor }) {
     // Toolbar
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+
+    const [downloadModalOpen, setDownloadModalOpen] = React.useState(false);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -49,12 +51,26 @@ export function SlidesMainToolbar({ fabricEditor }) {
     const changeDrawMode = useStore((state) => state.changeDrawMode);
     const persistCurrentSlide = useStore((state) => state.persistCurrentSlide);
     const addNewSlide = useStore((state) => state.addNewSlide);
+    const allSlides = useStore((state) => state.slides);
 
     return (
     <Toolbar>
         <Typography variant="h6">Toolbar</Typography>
         <ButtonGroup sx={{ mx: 2 }} variant="outlined">
-            <Button startIcon={ <FileDownloadIcon/> } >Download</Button>
+            <Button startIcon={ <FileDownloadIcon/> } onClick={() => { setDownloadModalOpen(true); }}>Download</Button>
+            <Modal
+                open={downloadModalOpen}
+                onClose={() => { setDownloadModalOpen(false); }}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Download all slides: click link below
+                </Typography>
+                <Link href={"data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allSlides))} download="myslide.json">Link</Link>
+                </Box>
+            </Modal>
             <Button onClick={handleClick} endIcon={ <ArrowDropDownIcon/> }>Add New Slide</Button>
             <Menu
             id="basic-menu"
