@@ -2,6 +2,8 @@ import { fabric } from 'fabric';
 
 import { create } from 'zustand'
 
+import { produce } from 'immer'
+
 const fabricCreateRegionObj = (pointA, pointB) => {
     const xCoords = [pointA.x, pointB.x].sort((a, b) => a - b);
     const yCoords = [pointA.y, pointB.y].sort((a, b) => a - b);
@@ -37,6 +39,28 @@ const fabricCreateDynamic = (pointA, pointB, objType) => {
 export const useStore = create((set, get) => ({
   drawMode: "none",
   firstCoord: { x: 0, y: 0},
+  activeSlide: 0,
+  slides: [],
+  initSlide: (slide) => {
+    set({ slides: [slide] })
+  },
+  persistCurrentSlide: (canvas) => {
+    set(produce((state) => {
+        state.slides[state.activeSlide] = {
+            content: canvas.toJSON(),
+            preview: canvas.toDataURL('png')
+        }
+    }))
+  },
+  addNewSlide: (canvas) => {
+    set(produce((state) => {
+        state.slides.push({
+            content: canvas.toJSON(),
+            preview: canvas.toDataURL('png')
+        });
+        state.activeSlide += 1
+    }))
+  },
   canvasMouseDownCB: (canvas) => {
     return (opt) => {
         /*console.log(isDrawing)

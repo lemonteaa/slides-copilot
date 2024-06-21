@@ -11,6 +11,8 @@ export function MainCanvas({ editor, onReady }) {
     const canvasMouseUpCB = useStore((state) => state.canvasMouseUpCB);
     const changeDrawMode = useStore((state) => state.changeDrawMode);
 
+    const initSlide = useStore((state) => state.initSlide);
+
     const myOnReady = (canvas) => {
         onReady(canvas);
         canvas.setHeight(500);
@@ -30,6 +32,13 @@ export function MainCanvas({ editor, onReady }) {
 
         canvas.on('mouse:down:before', canvasMouseDownCB(canvas));
         canvas.on('mouse:up', canvasMouseUpCB(canvas, originalColor));
+
+        //Init zustand store
+        const empty_slide = {
+            content: canvas.toJSON(),
+            preview: canvas.toDataURL('png')
+        }
+        initSlide(empty_slide);
     }
 
     return (

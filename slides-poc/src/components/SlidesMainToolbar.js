@@ -33,15 +33,22 @@ export function SlidesMainToolbar({ fabricEditor }) {
         if (event.target.getAttribute("data-item") == "two-cols") {
             if (fabricEditor) {
                 const canvas = fabricEditor.canvas;
+                //First save current slide
+                persistCurrentSlide(canvas);
+                //Then generate new canvas
                 canvas.remove(...canvas.getObjects());
                 FabricLayout.genLayout(canvas, FabricLayout.randomFromList(FabricLayout.titles), FabricLayout.randomFromList(FabricLayout.subtext));
                 canvas.renderAll();
+                //Then update
+                addNewSlide(canvas);
             }
         }
     };
 
     // Global Store
     const changeDrawMode = useStore((state) => state.changeDrawMode);
+    const persistCurrentSlide = useStore((state) => state.persistCurrentSlide);
+    const addNewSlide = useStore((state) => state.addNewSlide);
 
     return (
     <Toolbar>
